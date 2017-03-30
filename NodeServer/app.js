@@ -35,6 +35,23 @@ var svr = net.createServer(function (sock) {
 var svraddr = '127.0.0.1';
 var svrport = 1234;
 
+
+var express = require('express')
+
+var app = express()
+
+app.use('/public', express.static(__dirname + '/public'));
+
+app.get('/hello', function (req, res) {
+    res.status(200).send("Hello World!");
+});
+var server = require('http').Server(app); 
+
+
+server.listen(8080, function () {
+    console.log("Servidor corriendo en http://localhost:8080");
+});
+
 svr.listen(svrport, svraddr);
 console.log('Server Created at ' + svraddr + ':' + svrport + '\n');
 
