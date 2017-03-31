@@ -30,6 +30,9 @@
   <ItemGroup>
     <Compile Include="clientmain.js" />
     <Compile Include="app.js" />
+    <Compile Include="public\index.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Content Include="public\index.html">
       <SubType>Code</SubType>
     </Content>

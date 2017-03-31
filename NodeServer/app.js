@@ -1,3 +1,6 @@
+
+// sockets
+
 var net = require('net');
 var sockets = [];
 
@@ -19,10 +22,7 @@ var svr = net.createServer(function (sock) {
         }
         sock.write('Hello, server! Love, Client.');
     });
-
     
-
-
     sock.on('end', function () {
         console.log('Disconnected: ' + sock.remoteAddress + ':' + sock.remotePort);
         var idx = sockets.indexOf(sock);
@@ -32,33 +32,48 @@ var svr = net.createServer(function (sock) {
     });
 });
 
+svr.listen(svrport, svraddr);
+
+
 var svraddr = '127.0.0.1';
 var svrport = 1234;
-
-
 var express = require('express')
-
 var app = express()
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+
 
 app.use('/public', express.static(__dirname + '/public'));
 
 app.get('/hello', function (req, res) {
     res.status(200).send("Hello World!");
 });
+
 var server = require('http').Server(app); 
 
+io.on('connection', function (socket) {
+    console.log('a user connected');
+});
 
-server.listen(8080, function () {
+
+io.on('connection', function (socket) {
+    socket.on('chat message', function (msg) {
+        console.log('message: ' + msg);
+        //io.emit('chat message', { for: 'everyone' });
+        io.emit('chat message', { username: "fff", message: msg });
+        //socket.broadcast.emit('hi');
+    });
+});
+
+
+
+
+http.listen(8080, function () {
     console.log("Servidor corriendo en http://localhost:8080");
 });
 
-svr.listen(svrport, svraddr);
+
 console.log('Server Created at ' + svraddr + ':' + svrport + '\n');
-
-
-
-
-
 
 
 /*'use strict';
